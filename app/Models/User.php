@@ -21,6 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
+        'phone',
+        'address',
+        'latitude',
+        'longitude'
     ];
 
     /**
@@ -34,15 +39,68 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8'
+    ];
+
+    /**
+     * Get the role that owns the user.
+     */
+    public function role()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Get the restaurant that owns the user.
+     */
+    public function restaurant()
+    {
+        return $this->hasOne(Restaurant::class);
+    }
+
+    /**
+     * Get the driver that owns the user.
+     */
+    public function driver()
+    {
+        return $this->hasOne(Driver::class);
+    }
+
+    /**
+     * Check if the user is an admin.
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->role->slug === 'admin';
+    }
+
+    /**
+     * Check if the user is a restaurant.
+     *
+     * @return bool
+     */
+    public function isRestaurant()
+    {
+        return $this->role->slug === 'restaurant';
+    }
+
+    /**
+     * Check if the user is a driver.
+     *
+     * @return bool
+     */
+    public function isDriver()
+    {
+        return $this->role->slug === 'driver';
     }
 }
