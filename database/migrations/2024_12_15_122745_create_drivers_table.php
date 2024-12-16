@@ -15,13 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('vehicle_type');
-            $table->string('vehicle_plate_number')->nullable();
-            $table->string('driving_license_number');
-            $table->boolean('is_available')->default(false);
+            $table->string('vehicle_number');
+            $table->string('license_number');
+            $table->boolean('is_available')->default(true);
+            $table->boolean('is_verified')->default(false);
             $table->decimal('current_latitude', 10, 8)->nullable();
             $table->decimal('current_longitude', 11, 8)->nullable();
-            $table->decimal('rating', 3, 2)->default(5.00);
-            $table->integer('total_deliveries')->default(0);
             $table->timestamps();
         });
     }

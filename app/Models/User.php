@@ -21,11 +21,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
         'role_id',
         'phone',
         'address',
         'latitude',
-        'longitude'
+        'longitude',
+        'is_active'
     ];
 
     /**
@@ -50,6 +52,7 @@ class User extends Authenticatable
         'longitude' => 'decimal:8'
     ];
 
+    // Relations
     /**
      * Get the role that owns the user.
      */
@@ -75,13 +78,44 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the orders that owns the user.
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get the reviews that owns the user.
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    // Helper methods
+    /**
+     * Check if the user has a specific role.
+     *
+     * @param string|array $role
+     * @return bool
+     */
+    public function hasRole($role): bool
+    {
+        if (is_array($role)) {
+            return in_array($this->role, $role);
+        }
+        return $this->role === $role;
+    }
+
+    /**
      * Check if the user is an admin.
      *
      * @return bool
      */
-    public function isAdmin()
+    public function isAdmin(): bool
     {
-        return $this->role->slug === 'admin';
+        return $this->role === 'admin';
     }
 
     /**
@@ -89,9 +123,9 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isRestaurant()
+    public function isRestaurant(): bool
     {
-        return $this->role->slug === 'restaurant';
+        return $this->role === 'restaurant';
     }
 
     /**
@@ -99,8 +133,18 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isDriver()
+    public function isDriver(): bool
     {
-        return $this->role->slug === 'driver';
+        return $this->role === 'driver';
+    }
+
+    /**
+     * Check if the user is a customer.
+     *
+     * @return bool
+     */
+    public function isCustomer(): bool
+    {
+        return $this->role === 'customer';
     }
 }
