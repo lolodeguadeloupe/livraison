@@ -22,7 +22,7 @@ public function index()
     $userRole = Role::find($user->role_id);
 
     // Si ce n'est pas un admin système, filtrer pour ne montrer que les restaurants de l'utilisateur
-    if ($userRole->slug !== 'admin') {
+    if ($userRole === null || $userRole->slug !== 'admin') {
         $query->where('user_id', $user->id);
     }
 
@@ -46,7 +46,7 @@ public function index()
         });
 
     // Rediriger vers la vue appropriée en fonction du rôle
-    if ($userRole->slug === 'admin') {
+    if ($userRole && $userRole->slug === 'admin') {
         return Inertia::render('Admin/Restaurants/Index', [
             'restaurants' => $restaurants
         ]);
