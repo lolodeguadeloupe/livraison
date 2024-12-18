@@ -17,21 +17,17 @@ class Restaurant extends Model
         'name',
         'description',
         'address',
-        'latitude',
-        'longitude',
         'phone',
         'cuisine_type',
+        'opening_hours',
         'is_active',
-        'opening_time',
-        'closing_time'
+        'rating'
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
-        'opening_time' => 'datetime',
-        'closing_time' => 'datetime',
-        'latitude' => 'decimal:8',
-        'longitude' => 'decimal:8'
+        'rating' => 'float',
+        'opening_hours' => 'array'
     ];
 
     // Relations

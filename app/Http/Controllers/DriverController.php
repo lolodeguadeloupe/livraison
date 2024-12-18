@@ -17,6 +17,11 @@ class DriverController extends Controller
 
     public function index()
     {
+        $user = Auth::user();
+        if ($user) {
+            $user->load(['role', 'restaurant', 'driver']);
+        }
+
         $drivers = Driver::with('user')
             ->when(request('available'), function ($query) {
                 return $query->where('is_available', true);

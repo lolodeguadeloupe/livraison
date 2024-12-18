@@ -1,7 +1,7 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
+import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import MainLayout from '@/Layouts/MainLayout';
-import { MagnifyingGlassIcon as SearchIcon } from '@heroicons/react/24/outline';
 
 export default function DriversIndex({ auth, drivers }) {
     return (
@@ -22,7 +22,7 @@ export default function DriversIndex({ auth, drivers }) {
                                 </label>
                                 <div className="relative rounded-md shadow-sm">
                                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                        <SearchIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                                        <MagnifyingGlassIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
                                     </div>
                                     <input
                                         type="search"

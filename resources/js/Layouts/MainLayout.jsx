@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { Link } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import {
-    HomeIcon,
-    UserGroupIcon,
-    ClipboardDocumentListIcon as ClipboardListIcon,
-    Cog6ToothIcon as CogIcon,
+import { 
     Bars3Icon as MenuIcon,
     XMarkIcon as XIcon,
+    UserIcon,
+    HomeIcon,
     ShoppingBagIcon,
-    BanknotesIcon as CashIcon,
-    StarIcon
-} from '@heroicons/react/24/outline';
+    TruckIcon,
+    StarIcon,
+    CurrencyDollarIcon as CashIcon,
+    UserGroupIcon,
+    ChartBarIcon,
+    Cog6ToothIcon as CogIcon,
+    ArrowRightOnRectangleIcon as LogoutIcon
+} from '@heroicons/react/20/solid';
 
 export default function MainLayout({ user, header, children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -19,8 +22,8 @@ export default function MainLayout({ user, header, children }) {
     const navigation = [
         { name: 'Tableau de bord', href: '/dashboard', icon: HomeIcon },
         { name: 'Restaurants', href: '/restaurants', icon: ShoppingBagIcon },
-        { name: 'Commandes', href: '/orders', icon: ClipboardListIcon },
-        { name: 'Livreurs', href: '/drivers', icon: UserGroupIcon },
+        { name: 'Commandes', href: '/orders', icon: ChartBarIcon },
+        { name: 'Livreurs', href: '/drivers', icon: TruckIcon },
         { name: 'Paiements', href: '/payments', icon: CashIcon },
         { name: 'Avis', href: '/reviews', icon: StarIcon },
     ];
@@ -66,7 +69,7 @@ export default function MainLayout({ user, header, children }) {
                                     <img
                                         className="w-auto h-8"
                                         src="/logo.svg"
-                                        alt="Livraison"
+                                        alt="Livraison de merde"
                                     />
                                 </div>
                                 <nav className="px-2 mt-5 space-y-1">
@@ -83,6 +86,18 @@ export default function MainLayout({ user, header, children }) {
                                             {item.name}
                                         </Link>
                                     ))}
+                                    <Link
+                                        href={route('logout')}
+                                        method="post"
+                                        as="button"
+                                        className="flex items-center w-full px-2 py-2 text-base font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 group"
+                                    >
+                                        <LogoutIcon
+                                            className="w-6 h-6 mr-4 text-gray-400 group-hover:text-gray-500"
+                                            aria-hidden="true"
+                                        />
+                                        Déconnexion
+                                    </Link>
                                 </nav>
                             </div>
                             <div className="flex flex-shrink-0 p-4 border-t border-gray-200">
@@ -136,6 +151,18 @@ export default function MainLayout({ user, header, children }) {
                                     {item.name}
                                 </Link>
                             ))}
+                            <Link
+                                href={route('logout')}
+                                method="post"
+                                as="button"
+                                className="flex items-center w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 group"
+                            >
+                                <LogoutIcon
+                                    className="w-6 h-6 mr-3 text-gray-400 group-hover:text-gray-500"
+                                    aria-hidden="true"
+                                />
+                                Déconnexion
+                            </Link>
                         </nav>
                     </div>
                     <div className="flex flex-shrink-0 p-4 border-t border-gray-200">

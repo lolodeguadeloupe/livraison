@@ -5,7 +5,10 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Role;
 use Database\Seeders\RoleSeeder;
-use Database\Seeders\AdminUserSeeder;
+use Database\Seeders\SystemAdminSeeder;
+use Database\Seeders\RestaurantSeeder;
+use Database\Seeders\DeliveryUserSeeder;
+use Database\Seeders\OrderSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -19,6 +22,10 @@ class DatabaseSeeder extends Seeder
         // Créer d'abord les rôles
         $this->call([
             RoleSeeder::class,
+            SystemAdminSeeder::class,
+            RestaurantSeeder::class,
+            DeliveryUserSeeder::class,
+            OrderSeeder::class,
         ]);
 
         // Créer l'utilisateur test
@@ -34,8 +41,8 @@ class DatabaseSeeder extends Seeder
         }
 
         // Créer l'utilisateur admin
-        $this->call([
-            AdminUserSeeder::class,
-        ]);
+        // $this->call([
+        //     AdminUserSeeder::class,
+        // ]);
     }
 }

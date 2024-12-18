@@ -7,21 +7,25 @@ use App\Models\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-class AdminUserSeeder extends Seeder
+class SystemAdminSeeder extends Seeder
 {
     public function run(): void
     {
         $adminRole = Role::where('slug', 'admin')->first();
 
-        if (!$adminRole) {
-            throw new \Exception('Admin role not found. Please ensure RoleSeeder has been run first.');
-        }
-
+        // Premier administrateur
         User::create([
-            'name' => 'Admin',
+            'name' => 'System Administrator',
             'email' => 'admin@livraison.com',
+            'password' => Hash::make('admin123!@#'),
+            'role_id' => $adminRole->id,
+        ]);
+
+        // Second administrateur
+        User::create([
+            'name' => 'Second Administrator',
+            'email' => 'admin2@livraison.com',
             'password' => Hash::make('password'),
-            'email_verified_at' => now(),
             'role_id' => $adminRole->id,
         ]);
     }

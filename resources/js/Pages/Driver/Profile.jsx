@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
-import MainLayout from '@/Layouts/MainLayout';
+import React from 'react';
 import { Head } from '@inertiajs/react';
 import {
-    LocationMarkerIcon,
-    TruckIcon,
+    UserIcon,
+    PhoneIcon,
+    MapPinIcon,
     StarIcon,
-    ClockIcon,
-    CashIcon,
-    CheckCircleIcon
-} from '@heroicons/react/outline';
+    TruckIcon
+} from '@heroicons/react/20/solid';
 
 export default function DriverProfile({ auth, stats }) {
     const [isAvailable, setIsAvailable] = useState(true);

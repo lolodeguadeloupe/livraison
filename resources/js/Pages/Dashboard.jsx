@@ -1,27 +1,27 @@
 import React from 'react';
 import MainLayout from '@/Layouts/MainLayout';
 import { Head } from '@inertiajs/react';
-import {
-    TrendingUpIcon,
-    UserGroupIcon,
-    CashIcon,
-    ClockIcon,
+import { 
+    UserIcon,
     ShoppingBagIcon,
-    DocumentTextIcon
-} from '@heroicons/react/outline';
+    TruckIcon,
+    StarIcon,
+    CurrencyDollarIcon,
+    ChartBarIcon
+} from '@heroicons/react/20/solid';
 
 export default function Dashboard({ auth, stats }) {
     const cards = [
         {
             name: 'Commandes du jour',
             value: stats?.todayOrders || '0',
-            icon: ClockIcon,
+            icon: TruckIcon,
             description: 'Commandes reçues aujourd\'hui'
         },
         {
             name: 'Livreurs actifs',
             value: stats?.activeDrivers || '0',
-            icon: UserGroupIcon,
+            icon: UserIcon,
             description: 'Livreurs disponibles'
         },
         {
@@ -33,19 +33,19 @@ export default function Dashboard({ auth, stats }) {
         {
             name: 'Total commandes',
             value: stats?.totalOrders || '0',
-            icon: DocumentTextIcon,
+            icon: StarIcon,
             description: 'Commandes totales'
         },
         {
             name: 'Chiffre d\'affaires',
             value: `${(stats?.revenue || 0).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' })}`,
-            icon: CashIcon,
+            icon: CurrencyDollarIcon,
             description: 'Chiffre d\'affaires total'
         },
         {
             name: 'Croissance',
             value: stats?.growthRate || '0%',
-            icon: TrendingUpIcon,
+            icon: ChartBarIcon,
             description: 'Taux de croissance mensuel'
         }
     ];

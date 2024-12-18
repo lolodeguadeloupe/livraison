@@ -1,7 +1,11 @@
 import React from 'react';
 import MainLayout from '@/Layouts/MainLayout';
 import { Head, Link } from '@inertiajs/react';
-import { MagnifyingGlassIcon as SearchIcon, FunnelIcon as FilterIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { 
+    MagnifyingGlassIcon as SearchIcon, 
+    FunnelIcon as FilterIcon, 
+    PlusIcon
+} from '@heroicons/react/20/solid';
 
 export default function RestaurantsIndex({ auth, restaurants }) {
     return (
@@ -87,14 +91,21 @@ export default function RestaurantsIndex({ auth, restaurants }) {
                                                 {index < Math.floor(restaurant.rating) ? '★' : '☆'}
                                             </span>
                                         ))}
-                                        <span className="ml-1">{restaurant.rating.toFixed(1)}</span>
+                                        <span className="ml-1">
+                                            {restaurant.rating ? restaurant.rating.toFixed(1) : 'N/A'}
+                                        </span>
                                     </span>
                                     <span className="mx-2">•</span>
                                     <span>{restaurant.total_orders} commandes</span>
                                 </div>
                                 <p className="mt-2 text-sm text-gray-500 line-clamp-2">{restaurant.description}</p>
                                 <div className="flex items-center justify-between mt-4">
-                                    <span className="text-sm text-gray-500">{restaurant.address}</span>
+                                    <span className="flex items-center text-sm text-gray-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                                        </svg>
+                                        {restaurant.address}
+                                    </span>
                                 </div>
                             </div>
                         </Link>

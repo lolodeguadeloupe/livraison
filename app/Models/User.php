@@ -102,49 +102,50 @@ class User extends Authenticatable
      */
     public function hasRole($role): bool
     {
-        if (is_array($role)) {
-            return in_array($this->role, $role);
+        $userRole = $this->role()->first();
+        if (!$userRole) {
+            return false;
         }
-        return $this->role === $role;
+
+        if (is_array($role)) {
+            return in_array($userRole->slug, $role);
+        }
+        return $userRole->slug === $role;
     }
 
     /**
-     * Check if the user is an admin.
-     *
-     * @return bool
+     * Check if the user has admin role
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        $userRole = $this->role()->first();
+        return $userRole && $userRole->slug === 'admin';
     }
 
     /**
-     * Check if the user is a restaurant.
-     *
-     * @return bool
+     * Check if the user has restaurant role
      */
     public function isRestaurant(): bool
     {
-        return $this->role === 'restaurant';
+        $userRole = $this->role()->first();
+        return $userRole && $userRole->slug === 'restaurant';
     }
 
     /**
-     * Check if the user is a driver.
-     *
-     * @return bool
+     * Check if the user has driver role
      */
     public function isDriver(): bool
     {
-        return $this->role === 'driver';
+        $userRole = $this->role()->first();
+        return $userRole && $userRole->slug === 'driver';
     }
 
     /**
-     * Check if the user is a customer.
-     *
-     * @return bool
+     * Check if the user has customer role
      */
     public function isCustomer(): bool
     {
-        return $this->role === 'customer';
+        $userRole = $this->role()->first();
+        return $userRole && $userRole->slug === 'customer';
     }
 }

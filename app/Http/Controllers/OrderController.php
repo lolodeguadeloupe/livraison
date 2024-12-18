@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Driver;
 use Illuminate\Http\Request;
@@ -14,23 +13,53 @@ class OrderController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'verified']);
+        $this->middleware(['auth', 'verified']); 
     }
 
     public function index()
     {
-        $orders = Order::with(['user', 'restaurant', 'driver'])
-            ->when(Auth::user()->isRestaurant(), function ($query) {
-                return $query->where('restaurant_id', Auth::user()->restaurant->id);
+        $user = Auth::user()->load(['role', 'restaurant', 'driver']);
+        
+        $orders = Order::with(['user', 'restaurant.user', 'driver.user', 'user.role'])
+            ->when($user->isRestaurant(), function ($query) use ($user) {
+                return $query->where('restaurant_id', $user->restaurant?->id);
             })
-            ->when(Auth::user()->isDriver(), function ($query) {
-                return $query->where('driver_id', Auth::user()->driver->id);
+            ->when($user->isDriver(), function ($query) use ($user) {
+                return $query->where('driver_id', $user->driver?->id);
             })
-            ->when(Auth::user()->isCustomer(), function ($query) {
-                return $query->where('user_id', Auth::user()->id);
+            ->when($user->isCustomer(), function ($query) use ($user) {
+                return $query->where('user_id', $user->id);
             })
             ->latest()
-            ->get();
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'id' => $order->id,
+                    'created_at' => $order->created_at,
+                    'status' => $order->status,
+                    'total_amount' => $order->total_amount,
+                    'user' => $order->user ? [
+                        'name' => $order->user->name,
+                        'email' => $order->user->email,
+                    ] : null,
+                    'restaurant' => $order->restaurant ? [
+                        'name' => $order->restaurant->name,
+                        'address' => $order->restaurant->address,
+                        'user' => $order->restaurant->user ? [
+                            'name' => $order->restaurant->user->name,
+                            'email' => $order->restaurant->user->email,
+                        ] : null,
+                    ] : null,
+                    'driver' => $order->driver ? [
+                        'user' => $order->driver->user ? [
+                            'name' => $order->driver->user->name,
+                        ] : null,
+                        'phone' => $order->driver->phone,
+                    ] : null,
+                    'restaurant_id' => $order->restaurant_id,
+                    'driver_id' => $order->driver_id,
+                ];
+            });
 
         return Inertia::render('Orders/Index', [
             'orders' => $orders
@@ -89,7 +118,50 @@ class OrderController extends Controller
             ->with('success', 'Driver assigned successfully.');
     }
 
-    public function updateStatus(Request $request, Order $order)
+    public function updateStatus(Order $order, Request $request)
+    {
+        $request->validate([
+            'status' => ['required', 'string', 'in:pending,preparing,ready,delivering,delivered,cancelled'],
+        ]);
+
+        // Vérifier les autorisations
+        $user = auth()->user()->load(['role', 'restaurant', 'driver']);
+
+        // Vérifier que l'utilisateur a le droit de changer ce statut
+        $allowedStatusChanges = [
+            'restaurant' => [
+                'pending' => ['preparing', 'cancelled'],
+                'preparing' => ['ready'],
+            ],
+            'driver' => [
+                'ready' => ['delivering'],
+                'delivering' => ['delivered'],
+            ],
+        ];
+
+        $userRole = $user->isRestaurant() ? 'restaurant' : ($user->isDriver() ? 'driver' : null);
+
+        if (!$userRole || !isset($allowedStatusChanges[$userRole][$order->status]) || 
+            !in_array($request->status, $allowedStatusChanges[$userRole][$order->status])) {
+            return back()->with('error', 'Vous n\'êtes pas autorisé à effectuer ce changement de statut.');
+        }
+
+        // Pour un restaurant, vérifier que c'est bien son restaurant
+        if ($user->isRestaurant() && $order->restaurant_id !== $user->restaurant->id) {
+            return back()->with('error', 'Cette commande n\'appartient pas à votre restaurant.');
+        }
+
+        // Pour un livreur, vérifier que c'est bien sa commande
+        if ($user->isDriver() && $order->driver_id !== $user->driver->id) {
+            return back()->with('error', 'Cette commande ne vous est pas assignée.');
+        }
+
+        $order->update(['status' => $request->status]);
+
+        return back()->with('success', 'Le statut de la commande a été mis à jour.');
+    }
+
+    public function updateStatusOld(Request $request, Order $order)
     {
         $this->authorize('update', $order);
 
