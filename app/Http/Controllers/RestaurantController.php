@@ -21,29 +21,37 @@ public function index()
     // Vérifier le rôle de l'utilisateur via la relation role
     $userRole = Role::find($user->role_id);
 
-    // Si ce n'est pas un admin système, filtrer pour ne montrer que les restaurants de l'utilisateur
+    // Si ce n'est pas un admin système, retourner une page vide
     if ($userRole === null || $userRole->slug !== 'admin') {
-        $query->where('user_id', $user->id);
+        return Inertia::render('Restaurants/Index', [
+            'restaurants' => []
+        ]);
     }
 
-    $restaurants = $query->latest()
-        ->get()
-        ->map(function ($restaurant) {
-            return [
-                'id' => $restaurant->id,
-                'name' => $restaurant->name,
-                'description' => $restaurant->description,
-                'address' => $restaurant->address,
-                'phone' => $restaurant->phone,
-                'cuisine_type' => $restaurant->cuisine_type,
-                'opening_hours' => $restaurant->opening_hours,
-                'is_active' => $restaurant->is_active,
-                'rating' => $restaurant->rating,
-                'total_orders' => $restaurant->orders->count(),
-                'owner' => $restaurant->user->name,
-                'created_at' => $restaurant->created_at
-            ];
-        });
+    // Si c'est un admin, vérifier s'il a des restaurants
+    $restaurants = $query->latest()->get();
+    if ($restaurants->isEmpty()) {
+        return Inertia::render('Restaurants/Index', [
+            'message' => 'Pas de restaurant pour l\'instant'
+        ]);
+    }
+
+    $restaurants = $restaurants->map(function ($restaurant) {
+        return [
+            'id' => $restaurant->id,
+            'name' => $restaurant->name,
+            'description' => $restaurant->description,
+            'address' => $restaurant->address,
+            'phone' => $restaurant->phone,
+            'cuisine_type' => $restaurant->cuisine_type,
+            'opening_hours' => $restaurant->opening_hours,
+            'is_active' => $restaurant->is_active,
+            'rating' => $restaurant->rating,
+            'total_orders' => $restaurant->orders->count(),
+            'owner' => $restaurant->user->name,
+            'created_at' => $restaurant->created_at
+        ];
+    });
 
     // Rediriger vers la vue appropriée en fonction du rôle
     if ($userRole && $userRole->slug === 'admin') {
