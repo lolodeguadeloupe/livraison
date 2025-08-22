@@ -25,7 +25,7 @@ export default function RestaurantsIndex({ auth, restaurants }) {
                             </label>
                             <div className="relative rounded-md shadow-sm">
                                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <SearchIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
+                                    <MagnifyingGlassIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
                                 </div>
                                 <input
                                     type="search"
