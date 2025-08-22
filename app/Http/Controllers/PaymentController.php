@@ -15,24 +15,17 @@ class PaymentController extends Controller
         $this->middleware('auth');
     }
 
-    public function store(PaymentRequest $request, Order $order)
+    public function index()
     {
-        $this->authorize('create', [Payment::class, $order]);
+        $payments = Payment::with('order')->get();
 
-        $payment = $order->payment()->create($request->validated());
-
-        if ($payment->status === 'completed') {
-            $order->update(['status' => 'confirmed']);
-        }
-
-        return redirect()->route('orders.show', $order)
-            ->with('success', 'Payment processed successfully.');
+        return inertia('Payments/Index', [
+            'payments' => $payments
+        ]);
     }
 
     public function show(Payment $payment)
     {
-        $this->authorize('view', $payment);
-
         $payment->load('order');
 
         return inertia('Payments/Show', [
@@ -41,6 +34,15 @@ class PaymentController extends Controller
     }
 
     // API endpoints
+    public function apiIndex()
+    {
+        $this->authorize('viewAny', Payment::class);
+
+        $payments = Payment::with('order')->get();
+
+        return response()->json($payments);
+    }
+
     public function apiStore(PaymentRequest $request, Order $order)
     {
         $this->authorize('create', [Payment::class, $order]);

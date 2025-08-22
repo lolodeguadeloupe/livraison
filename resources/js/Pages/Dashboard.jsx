@@ -8,7 +8,7 @@ import {
     StarIcon,
     CurrencyDollarIcon,
     ChartBarIcon
-} from '@heroicons/react/20/solid';
+} from '@heroicons/react/solid';
 
 export default function Dashboard({ auth, stats }) {
     const cards = [

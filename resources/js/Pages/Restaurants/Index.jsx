@@ -2,10 +2,10 @@ import React from 'react';
 import MainLayout from '@/Layouts/MainLayout';
 import { Head, Link } from '@inertiajs/react';
 import { 
-    MagnifyingGlassIcon as SearchIcon, 
-    FunnelIcon as FilterIcon, 
+    SearchIcon as MagnifyingGlassIcon, 
+    AdjustmentsIcon as FilterIcon, 
     PlusIcon
-} from '@heroicons/react/20/solid';
+} from '@heroicons/react/solid';
 
 export default function RestaurantsIndex({ auth, restaurants }) {
     return (

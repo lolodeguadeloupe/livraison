@@ -10,7 +10,7 @@ import {
     TruckIcon,
     CogIcon,
     ExclamationCircleIcon
-} from '@heroicons/react/20/solid';
+} from '@heroicons/react/solid';
 
 export default function Index({ auth, orders }) {
     const [statusFilter, setStatusFilter] = useState('all');

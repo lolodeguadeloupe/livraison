@@ -3,7 +3,7 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { StarIcon } from '@heroicons/react/20/solid';
+import { StarIcon } from '@heroicons/react/solid';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 

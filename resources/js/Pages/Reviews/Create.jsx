@@ -4,7 +4,7 @@ import MainLayout from '@/Layouts/MainLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
-import { StarIcon } from '@heroicons/react/20/solid';
+import { StarIcon } from '@heroicons/react/solid';
 
 export default function Create({ auth, order }) {
     const [hoveredRating, setHoveredRating] = useState(0);

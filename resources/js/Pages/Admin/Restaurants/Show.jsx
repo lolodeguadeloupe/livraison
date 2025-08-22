@@ -6,8 +6,8 @@ import { fr } from 'date-fns/locale';
 import { 
     UserIcon,
     PhoneIcon,
-    MapPinIcon 
-} from '@heroicons/react/20/solid';
+    LocationMarkerIcon as MapPinIcon 
+} from '@heroicons/react/solid';
 
 export default function RestaurantShow({ auth, restaurant, orders = [], todayOrders = [] }) {
     if (!restaurant) {

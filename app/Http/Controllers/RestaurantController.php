@@ -16,27 +16,25 @@ class RestaurantController extends Controller
 public function index()
 {
     $user = auth()->user();
+    
+    // Préparation de la requête de base avec les relations
     $query = Restaurant::with(['user', 'orders']);
 
-    // Vérifier le rôle de l'utilisateur via la relation role
-    $userRole = Role::find($user->role_id);
-
-    // Si ce n'est pas un admin système, retourner une page vide
-    if ($userRole === null || $userRole->slug !== 'admin') {
-        return Inertia::render('Restaurants/Index', [
-            'restaurants' => []
-        ]);
+    // Si l'utilisateur a le rôle 'admin', on montre tous les restaurants
+    if ($user->hasRole('admin')) {
+        $restaurants = $query->latest()->get();
+    } 
+    // Si l'utilisateur est un restaurateur, on ne montre que son restaurant
+    else if ($user->hasRole('restaurant')) {
+        $restaurants = $query->where('user_id', $user->id)->get();
+    }
+    // Pour les autres utilisateurs (clients), on montre tous les restaurants actifs
+    else {
+        $restaurants = $query->where('is_active', true)->latest()->get();
     }
 
-    // Si c'est un admin, vérifier s'il a des restaurants
-    $restaurants = $query->latest()->get();
-    if ($restaurants->isEmpty()) {
-        return Inertia::render('Restaurants/Index', [
-            'message' => 'Pas de restaurant pour l\'instant'
-        ]);
-    }
-
-    $restaurants = $restaurants->map(function ($restaurant) {
+    // Transformation des données pour la vue
+    $restaurantsData = $restaurants->map(function ($restaurant) {
         return [
             'id' => $restaurant->id,
             'name' => $restaurant->name,
@@ -53,16 +51,16 @@ public function index()
         ];
     });
 
-    // Rediriger vers la vue appropriée en fonction du rôle
-    if ($userRole && $userRole->slug === 'admin') {
+    // Rendu de la vue appropriée selon le rôle
+    if ($user->hasRole('admin')) {
         return Inertia::render('Admin/Restaurants/Index', [
-            'restaurants' => $restaurants
-        ]);
-    } else {
-        return Inertia::render('Restaurants/Index', [
-            'restaurants' => $restaurants
+            'restaurants' => $restaurantsData
         ]);
     }
+
+    return Inertia::render('Restaurants/Index', [
+        'restaurants' => $restaurantsData
+    ]);
 }
 
     public function dashboard()
@@ -209,6 +207,14 @@ public function index()
         return Inertia::render('Restaurants/Show', [
             'restaurant' => $restaurantData
         ]);
+    }
+
+    public function myRestaurant()
+    {
+        $user = auth()->user();
+        $restaurant = Restaurant::where('user_id', $user->id)->firstOrFail();
+        
+        return $this->show($restaurant);
     }
 
     public function edit(Restaurant $restaurant)

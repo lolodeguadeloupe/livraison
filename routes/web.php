@@ -35,12 +35,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('restaurants', RestaurantController::class);
         Route::resource('drivers', DriverController::class);
         Route::resource('orders', OrderController::class);
+        // Admin payment routes
+        Route::resource('payments', PaymentController::class)->only(['index', 'show']);
     });
 
     // Restaurant owner routes
     Route::middleware(['role:restaurant_owner'])->prefix('restaurant')->name('restaurant.')->group(function () {
         Route::get('/dashboard', [RestaurantController::class, 'dashboard'])->name('dashboard');
         Route::resource('orders', OrderController::class)->only(['index', 'show', 'update']);
+        // Restaurant owner payment routes
+        Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
+        Route::get('/payments/{payment}', [PaymentController::class, 'show'])->name('payments.show');
+        // Restaurant owner restaurant routes
+        Route::get('/restaurant', [RestaurantController::class, 'show'])->name('restaurant.show');
     });
 
     // Orders routes
@@ -55,9 +62,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Drivers routes
     Route::resource('drivers', DriverController::class);
     
-    // Payments routes
-    Route::resource('payments', PaymentController::class);
-    
     // Reviews routes
     Route::resource('reviews', ReviewController::class);
     Route::post('reviews/{review}/respond', [ReviewController::class, 'respond'])->name('reviews.respond');
@@ -71,6 +75,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/orders/{order}/delivery-request', [DeliveryRequestController::class, 'store'])->name('delivery-requests.store');
     Route::get('/delivery-requests', [DeliveryRequestController::class, 'index'])->name('delivery-requests.index');
     Route::get('/delivery-requests/{deliveryRequest}', [DeliveryRequestController::class, 'show'])->name('delivery-requests.show');
+
+    // Route pour voir les restaurants (différente selon le rôle)
+    Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
+    
+    // Routes spécifiques aux propriétaires de restaurants
+    Route::middleware(['role:restaurant'])->group(function () {
+        Route::get('/restaurant/dashboard', [RestaurantController::class, 'dashboard'])->name('restaurant.dashboard');
+    });
 });
 
 // Admin routes

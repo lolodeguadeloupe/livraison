@@ -62,5 +62,9 @@ networks:
     sail:
         driver: bridge
 volumes:
+    # sail-mysql est un volume qui stocke les données de la base de données mysql
+    # il est utilis  par le service mysql
+    # le driver local signifie que le volume est stock  sur l'h te local
+    # plut t que sur un volume docker externe
     sail-mysql:
         driver: local

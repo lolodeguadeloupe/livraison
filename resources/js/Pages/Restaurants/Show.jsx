@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
 import MainLayout from '@/Layouts/MainLayout';
 import { Dialog } from '@headlessui/react';
-import { StarIcon } from '@heroicons/react/20/solid';
+import { StarIcon, LocationMarkerIcon as MapPinIcon } from '@heroicons/react/solid';
 
 const OrderStatus = ({ status }) => {
     const getStatusConfig = (status) => {

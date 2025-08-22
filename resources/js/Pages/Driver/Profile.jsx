@@ -3,10 +3,10 @@ import { Head } from '@inertiajs/react';
 import {
     UserIcon,
     PhoneIcon,
-    MapPinIcon,
+    LocationMarkerIcon as MapPinIcon,
     StarIcon,
     TruckIcon
-} from '@heroicons/react/20/solid';
+} from '@heroicons/react/solid';
 
 export default function DriverProfile({ auth, stats }) {
     const [isAvailable, setIsAvailable] = useState(true);

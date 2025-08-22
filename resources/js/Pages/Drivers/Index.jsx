@@ -1,6 +1,6 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+import { SearchIcon as MagnifyingGlassIcon } from '@heroicons/react/solid';
 import MainLayout from '@/Layouts/MainLayout';
 
 export default function DriversIndex({ auth, drivers }) {

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import { 
-    Bars3Icon as MenuIcon,
-    XMarkIcon as XIcon,
+    MenuIcon,
+    XIcon,
     UserIcon,
     HomeIcon,
     ShoppingBagIcon,
@@ -12,12 +12,13 @@ import {
     CurrencyDollarIcon as CashIcon,
     UserGroupIcon,
     ChartBarIcon,
-    Cog6ToothIcon as CogIcon,
-    ArrowRightOnRectangleIcon as LogoutIcon
-} from '@heroicons/react/20/solid';
+    CogIcon,
+    LogoutIcon
+} from '@heroicons/react/solid';
 
 export default function MainLayout({ user, header, children }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const { url } = usePage();
 
     const navigation = [
         { name: 'Tableau de bord', href: '/dashboard', icon: HomeIcon },
@@ -77,10 +78,10 @@ export default function MainLayout({ user, header, children }) {
                                         <Link
                                             key={item.name}
                                             href={item.href}
-                                            className="flex items-center px-2 py-2 text-base font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 group"
+                                            className={`flex items-center px-2 py-2 text-base font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 group ${url === item.href ? 'bg-gray-100 text-gray-900' : ''}`}
                                         >
                                             <item.icon
-                                                className="w-6 h-6 mr-4 text-gray-400 group-hover:text-gray-500"
+                                                className={`w-6 h-6 mr-4 text-gray-400 group-hover:text-gray-500 ${url === item.href ? 'text-gray-500' : ''}`}
                                                 aria-hidden="true"
                                             />
                                             {item.name}
@@ -142,10 +143,10 @@ export default function MainLayout({ user, header, children }) {
                                 <Link
                                     key={item.name}
                                     href={item.href}
-                                    className="flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 group"
+                                    className={`flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 group ${url === item.href ? 'bg-gray-100 text-gray-900' : ''}`}
                                 >
                                     <item.icon
-                                        className="w-6 h-6 mr-3 text-gray-400 group-hover:text-gray-500"
+                                        className={`w-6 h-6 mr-3 text-gray-400 group-hover:text-gray-500 ${url === item.href ? 'text-gray-500' : ''}`}
                                         aria-hidden="true"
                                     />
                                     {item.name}
